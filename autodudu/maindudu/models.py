@@ -93,7 +93,7 @@ class Carro(models.Model):
     cor = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
     numero_portas = models.IntegerField()
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='carros')
+    usuario = models.ForeignKey(Usuario, to_field='_id', on_delete=models.CASCADE, related_name='carros')
  
     @classmethod
     def create_carro(cls, automovel, cor, tipo, numero_portas, usuario_id):
@@ -111,6 +111,7 @@ class Carro(models.Model):
     def deletar_carro(cls, carro_id):
         try:
             carro = Carro.objects.get(pk=ObjectId(carro_id))
+            Anuncio.objects.filter(object_id=str(carro_id)).delete()
             carro.delete()
         except Carro.DoesNotExist:
             print(f"Carro com ID {carro_id} não encontrado.")
@@ -135,11 +136,13 @@ class Moto(models.Model):
     @classmethod
     def obter_todas_motos(cls, user_id):
         return cls.objects.filter(usuario=ObjectId(user_id))
+        
 
     @classmethod
     def deletar_moto(cls, moto_id):
         try:
             moto = Moto.objects.get(pk=ObjectId(moto_id))
+            Anuncio.objects.filter(object_id=str(moto_id)).delete()
             moto.delete()
         except Moto.DoesNotExist:
             print(f"Moto com ID {moto_id} não encontrado.")
@@ -153,14 +156,13 @@ class Anuncio(models.Model):
     preco_por_dia = models.DecimalField(max_digits=10, decimal_places=2)
     disponibilidade = models.BooleanField(default=True)
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='anuncios_gerais')
-    
-    # Campo para upload de imagem
+    imagem = models.ImageField(upload_to='anuncios/', blank=True, null=True)  
    
     # Campo para descrição de texto
     descricao = models.TextField(blank=True, null=True)
 
     @classmethod
-    def create_anuncio(cls, automovel, preco_por_dia, disponibilidade, usuario, descricao=None):
+    def create_anuncio(cls, automovel, preco_por_dia, disponibilidade, usuario, descricao=None, imagem=imagem):
         if not automovel or not preco_por_dia or not disponibilidade or not usuario:
             raise ValueError("Todos os campos são obrigatórios")
         
@@ -170,6 +172,7 @@ class Anuncio(models.Model):
             disponibilidade=disponibilidade, 
             usuario=usuario,
             descricao=descricao,
+            imagem=imagem
         )
         anuncio.save()
         return anuncio

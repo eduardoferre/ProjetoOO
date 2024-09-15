@@ -1,4 +1,0 @@
-show dbs
-use autodududb
-show collections
-db.maindudu_automovel.find(_id='66e6b2573958e1fff9631cdd')

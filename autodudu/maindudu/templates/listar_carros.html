@@ -3,7 +3,9 @@
 {% block title %}Lista de Carros{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">Lista de Carros</h1>
+<a href="{% url 'criar_carro' %}" class="btn btn-primary mb-4 mt-4">Criar Carro</a>
+
+    <h1>Lista de Carros</h1>
     <ul class="list-group">
         {% for carro in carros %}
         <li class="list-group-item">
@@ -11,9 +13,9 @@
             - Cor: {{ carro.cor }} 
             - Tipo: {{ carro.tipo }} 
             - Portas: {{ carro.numero_portas }}
+            <a href="{% url 'editar_carro' carro.pk %}" class="btn btn-warning btn-sm float-end ms-2">Editar</a>
             <a href="{% url 'deletar_carro' carro.pk %}" class="btn btn-danger btn-sm float-end">Deletar</a>
         </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'criar_carro' %}" class="btn btn-primary mt-4">Criar Carro</a>
 {% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Editar Moto</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="automovel" class="form-label">Moto:</label>
+            {% for automovel in automoveis %}
+                    <option value="{{ automovel.pk }}" disabled>
+                        {{ automovel.marca }} {{ automovel.modelo }}
+                    </option>
+            {% endfor %}
+        </div>
+       <div class="form-group">
+            <label for="cor">Cor</label>
+            <input type="text" name="cor" id="cor" class="form-control" value="{{ moto.cor }}">
+        </div>
+        <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <input type="text" name="tipo" id="tipo" class="form-control" value="{{ moto.tipo }}">
+        </div>
+        <div class="form-group">
+            <label for="cilindradas">Cilindradas</label>
+            <input type="number" name="cilindradas" id="cilindradas" class="form-control" value="{{ moto.cilindradas }}">
+        </div>
+        </br>
+         <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+    <a href="{% url 'listar_motos' %}" class="btn btn-secondary mt-2">Cancelar</a>
+{% endblock %}

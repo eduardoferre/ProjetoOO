@@ -6,7 +6,7 @@
     <h1 class="mt-4">Criar Novo Anúncio</h1>
     
     <!-- Formulário de criação de anúncio -->
-    <form method="POST" class="mt-4">
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
         {% csrf_token %}
 
         <!-- Seleção de Automóvel (Carro ou Moto) -->
@@ -57,6 +57,12 @@
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição:</label>
             <textarea id="descricao" name="descricao" class="form-control" rows="4"></textarea>
+        </div>
+
+        <!-- Campo de Upload de Imagem -->
+        <div class="mb-3">
+            <label for="imagem" class="form-label">Imagem do Automóvel:</label>
+            <input type="file" id="imagem" name="imagem" class="form-control">
         </div>
 
         <!-- Botão para criar anúncio -->

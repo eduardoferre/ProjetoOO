@@ -3,12 +3,15 @@
 {% block title %}Lista de Motos{% endblock %}
 
 {% block content %}
+<a href="{% url 'criar_moto' %}" class="btn btn-primary mt-4 mb-4">Criar Moto</a>
+
     <h1>Lista de Motos</h1>
     <ul class="list-group">
         {% for moto in motos %}
         <li class="list-group-item">
             {{ moto.automovel.marca }} {{ moto.automovel.modelo }} - Cilindradas: {{ moto.cilindradas }} - Tipo: {{ moto.tipo }} - Cor: {{ moto.cor }}
             {% if moto.pk %}
+                <a href="{% url 'editar_moto' moto.pk %}" class="btn btn-warning btn-sm float-end ms-2">Editar</a>
                 <a href="{% url 'deletar_moto' moto.pk %}" class="btn btn-danger btn-sm float-end">Deletar</a>
             {% else %}
                 <span class="text-danger">ID da moto inválido</span>
@@ -16,5 +19,4 @@
         </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'criar_moto' %}" class="btn btn-primary mt-4">Criar Moto</a>
 {% endblock %}

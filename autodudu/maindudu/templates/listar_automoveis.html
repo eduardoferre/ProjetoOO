@@ -3,6 +3,8 @@
 {% block title %}Lista de Automóveis{% endblock %}
 
 {% block content %}
+<a href="{% url 'criar_automovel' %}" class="btn btn-primary mt-4">Criar Novo Automóvel</a>
+
     <h1 class="mt-4">Lista de Automóveis</h1>
 
     <ul class="list-group mt-4">
@@ -12,6 +14,4 @@
         </li>
         {% endfor %}
     </ul>
-
-    <a href="{% url 'criar_automovel' %}" class="btn btn-primary mt-4">Criar Novo Automóvel</a>
 {% endblock %}

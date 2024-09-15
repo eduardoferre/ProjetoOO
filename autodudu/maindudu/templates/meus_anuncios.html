@@ -1,22 +1,48 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Meus Anúncios
-{% endblock %}
+{% block title %}Meus Anúncios{% endblock %}
 
 {% block content %}
-    <h1>Meus Anúncios</h1>
 
-    <ul>
+<div class="mt-4">
+    <a href="{% url 'criar_anuncio' %}" class="btn btn-success">Criar Novo Anúncio</a>
+</div>
+
+<div class="container mt-4">
+    <h1 class="mt-4">Meus Anúncios</h1>
+
+    <!-- Cria um grid para os anúncios -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for anuncio in anuncios %}
-        <li>
-            {{ anuncio.automovel.marca }} - {{ anuncio.preco_por_dia }} por dia - Disponível: {{ anuncio.disponibilidade }}
-            <a href="{% url 'editar_anuncio' anuncio.pk %}">Editar</a>
-            <a href="{% url 'deletar_anuncio' anuncio.pk %}">Deletar</a>
-        </li>
+        <div class="col">
+            <div class="card h-100">
+                <!-- Aqui, a imagem será exibida -->
+                <img src="{{ anuncio.imagem.url }}" width="480px" height="300px" class="card-img-top" alt="Imagem do automóvel" style="object-fit: cover; object-position: center;">
+            
+                
+                <div class="card-body">
+                    <!-- Informações básicas do anúncio -->
+                    <h5 class="card-title">{{ anuncio.automovel_detalhes.marca }} {{ anuncio.automovel_detalhes.modelo }}</h5>
+                    <p class="card-text"><strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}</p>
+                    <p class="card-text"><strong>Disponibilidade:</strong> 
+                        {% if anuncio.disponibilidade %}
+                            Disponível
+                        {% else %}
+                            Indisponível
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <div class="card-footer d-flex justify-content-between">
+                    <!-- Botões para consultar, editar e deletar -->
+                    <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-info btn-sm">Consultar</a>
+                    <a href="{% url 'editar_anuncio' anuncio.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'deletar_anuncio' anuncio.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
+</div>
 
-    <br>
-    <a href="{% url 'criar_anuncio' %}">Criar Novo Anúncio</a>
 {% endblock %}

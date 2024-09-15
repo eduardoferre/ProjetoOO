@@ -1,20 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Editar Anúncio</title>
-</head>
-<body>
-    <h1>Editar Anúncio</h1>
+{% extends 'base.html' %}
+
+{% block title %}Editar Anúncio{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Editar Anúncio</h1>
     <form method="POST">
         {% csrf_token %}
-        <label for="preco_por_dia">Preço por dia:</label>
-        <input type="text" id="preco_por_dia" name="preco_por_dia" value="{{ anuncio.preco_por_dia }}" required>
-        <br>
-        <label for="disponibilidade">Disponibilidade:</label>
-        <input type="text" id="disponibilidade" name="disponibilidade" value="{{ anuncio.disponibilidade }}" required>
-        <br>
-        <button type="submit">Salvar</button>
+        
+        <div class="mb-3">
+            <label for="preco_por_dia" class="form-label">Preço por dia:</label>
+            <input type="text" id="preco_por_dia" name="preco_por_dia" class="form-control" value="{{ anuncio.preco_por_dia }}" required>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="disponibilidade" name="disponibilidade" {% if anuncio.disponibilidade %}checked{% endif %}>
+            <label class="form-check-label" for="disponibilidade">Disponível</label>
+        </div>
+
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição:</label>
+            <textarea id="descricao" name="descricao" class="form-control" rows="4" required>{{ anuncio.descricao }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <a href="{% url 'listar_anuncios' %}" class="btn btn-secondary">Cancelar</a>
     </form>
-    <a href="{% url 'listar_anuncios' %}">Voltar à Lista</a>
-</body>
-</html>
+</div>
+{% endblock %}

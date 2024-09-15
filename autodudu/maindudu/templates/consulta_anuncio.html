@@ -1,13 +1,121 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Consulta de Anúncio</title>
-</head>
-<body>
-    <h1>Consulta de Anúncio</h1>
-    <p><strong>Automóvel:</strong> {{ anuncio.automovel }}</p>
-    <p><strong>Preço por dia:</strong> {{ anuncio.preco_por_dia }}</p>
-    <p><strong>Disponível:</strong> {{ anuncio.disponibilidade }}</p>
-    <a href="{% url 'listar_anuncios' %}">Voltar à Lista</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Consulta de Anúncio{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Coluna esquerda: Imagem e informações principais -->
+        <div class="col-md-8">
+            <h1>{{ automovel.automovel.marca }} {{ automovel.automovel.modelo }} {{ automovel.automovel.ano }}</h1>
+            <p class="text-muted">Publicado em {{ anuncio.data_publicacao|date:"d/m/Y" }} às {{ anuncio.data_publicacao|date:"H:i" }}</p>
+            
+            <!-- Galeria de imagens -->
+            <div id="carouselExampleControls" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ anuncio.imagem.url }}" class="d-block w-100" style="width: 100%; height: 400px; object-fit: cover; object-position: center;" alt="Imagem do Carro">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+
+
+
+
+            <!-- Preço e outras informações -->
+            <h3 class="text-primary">R$ {{ anuncio.preco_por_dia }}</h3>
+
+            <p><strong>Descrição, em geral:</strong> {{ anuncio.descricao }}</p>
+
+            <!-- Disponibilidade -->
+            <p><strong>Disponibilidade:</strong> 
+                {% if anuncio.disponibilidade %}
+                    <span class="badge bg-success">Disponível</span>
+                {% else %}
+                    <span class="badge bg-danger">Indisponível</span>
+                {% endif %}
+            </p>
+
+            <button class="btn btn-info">Simular Financiamento</button>
+
+            <!-- Características -->
+            <hr>
+            <h4 class="mt-4">Características</h4>
+            <div class="row">
+                <!-- Marca -->
+                <div class="col-6 mb-3">
+                    <strong>Marca:</strong> 
+                    <p>{{ automovel.automovel.marca }}</p>
+                </div>
+                <!-- Modelo -->
+                <div class="col-6 mb-3">
+                    <strong>Modelo:</strong> 
+                    <p>{{ automovel.automovel.modelo }}</p>
+                </div>
+                <!-- Ano -->
+                <div class="col-6 mb-3">
+                    <strong>Ano:</strong> 
+                    <p>{{ automovel.automovel.ano }}</p>
+                </div>
+                
+                {% if tipo_automovel == 'carro' %}
+                    <!-- Cor, Tipo e Número de Portas (Somente para Carro) -->
+                    <div class="col-6 mb-3">
+                        <strong>Cor:</strong> 
+                        <p>{{ automovel.cor }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong>Tipo:</strong> 
+                        <p>{{ automovel.tipo }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong>Número de Portas:</strong> 
+                        <p>{{ automovel.numero_portas }} portas</p>
+                    </div>
+                {% elif tipo_automovel == 'moto' %}
+                    <!-- Cor, Tipo e Cilindradas (Somente para Moto) -->
+                    <div class="col-6 mb-3">
+                        <strong>Cor:</strong> 
+                        <p>{{ automovel.cor }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong>Tipo:</strong> 
+                        <p>{{ automovel.tipo }}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong>Cilindradas:</strong> 
+                        <p>{{ automovel.cilindradas }} cc</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Coluna direita: Informações adicionais -->
+        <div class="col-md-4">
+            <div class="border p-3 mb-4">
+                <h5>Entre em contato</h5>
+                <a href="#" class="btn btn-warning w-100">Chat</a>
+                <p class="mt-2">Último acesso há {{ anuncio.usuario.last_access }} horas</p>
+            </div>
+
+            <div class="border p-3 mb-4">
+                <h5>Informações do vendedor</h5>
+                <p><strong>{{ anuncio.usuario.nome }}</strong></p>
+                <p>{{ anuncio.usuario.email }}</p>
+                <p><strong>Endereço:</strong> {{ anuncio.usuario.endereco }}</p>
+                <p><strong>Membro desde:</strong> {{ anuncio.usuario.data_criacao|date:"Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url 'listar_anuncios' %}" class="btn btn-secondary mt-4">Voltar à Lista</a>
+</div>
+{% endblock %}

@@ -2,57 +2,153 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  {% load bootstrap5 %}  <!-- Carrega o bootstrap5 -->
-  {% bootstrap_css %}    <!-- Inclui o CSS do Bootstrap -->
-  {% bootstrap_javascript %} <!-- Inclui o JavaScript do Bootstrap -->
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <style>
+    body {
+      background-color: #ffffff; /* Cor de fundo do corpo */
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #343a40; /* Cor de fundo da navbar */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
+      width: 100%;
+    }
+  
+    .navbar-brand {
+      font-weight: bold; /* Deixa o texto mais grosso */
+      color: #ffffff; /* Cor do texto da marca */
+      font-size: 1.75rem; /* Tamanho da fonte da marca */
+    }
+  
+    .navbar-brand:hover {
+      color: #e9ecef; /* Cor do texto ao passar o mouse */
+    }
+  
+    .navbar-nav .nav-link {
+      color: #ffffff; /* Cor do texto dos links de navegação */
+      font-size: 1.2rem; /* Tamanho da fonte dos links de navegação */
+      padding: 0.5rem 1rem; /* Espaçamento interno dos links de navegação */
+    }
+  
+    .navbar-nav .nav-link:hover {
+      color: #007bff; /* Cor do texto dos links ao passar o mouse */
+    }
+  
+    .navbar-toggler {
+      border: none; /* Remove a borda do botão de alternância */
+    }
+  
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,..."); 
+    }
+  
+    /* Botões */
+    .btn-primary {
+      background-color: #2e5988; /* Cor de fundo do botão primário */
+      border: none; /* Remove a borda padrão */
+      font-size: 1rem; /* Tamanho da fonte do botão */
+      padding: 0.5rem 1rem; /* Espaçamento interno do botão */
+      border-radius: 0.25rem; /* Bordas arredondadas do botão */
+    }
+  
+    .btn-primary:hover {
+      background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+    }
+
+    .btn-info {
+      background-color: #549644; /* Cor de fundo do botão primário */
+      border: none; /* Remove a borda padrão */
+      font-size: 1rem; /* Tamanho da fonte do botão */
+      padding: 0.5rem 1rem; /* Espaçamento interno do botão */
+      border-radius: 0.25rem; /* Bordas arredondadas do botão */
+    }
+  
+    .btn-info:hover {
+      background-color: #00b35a; /* Cor de fundo ao passar o mouse */
+      color: #ffffff;
+    }
+  
+    .btn-danger {
+      background-color: #dc3545; /* Cor de fundo do botão de perigo */
+      border: none; /* Remove a borda padrão */
+      font-size: 1rem; /* Tamanho da fonte do botão */
+      padding: 0.5rem 0.6rem; /* Espaçamento interno do botão */
+      border-radius: 0.30rem; /* Bordas arredondadas do botão */
+    }
+  
+    .btn-danger:hover {
+      background-color: #c82333; /* Cor de fundo ao passar o mouse */
+    }
+
+    .btn-warning {
+      background-color: #ffc107; /* Cor de fundo do botão de aviso */
+      border: none; /* Remove a borda padrão */
+      font-size: 1rem; /* Tamanho da fonte do botão */
+      padding: 0.5rem 1rem; /* Espaçamento interno do botão */
+      border-radius: 0.25rem; /* Bordas arredondadas do botão */
+      color: #212529; /* Cor do texto do botão */
+    }
+
+    .btn-warning:hover {
+      background-color: #e0a800; /* Cor de fundo ao passar o mouse */
+      color: #ffffff; /* Cor do texto ao passar o mouse */
+      opacity: 0.9; /* Opacidade ao passar o mouse */
+    }
+    
+
+  </style>
+  
 </head>
 <body>
 
 <div class="container">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-info bg-info">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand link-light" href="/">AutoDudu</a>
+      <a class="navbar-brand" href="/">AutoDudu</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_carros' %}">Meus Carros</a>
+              <a class="nav-link" href="{% url 'listar_carros' %}">Meus Carros</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_motos' %}">Minhas Motos</a>
+              <a class="nav-link" href="{% url 'listar_motos' %}">Minhas Motos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_automoveis' %}">Automóveis</a>
+              <a class="nav-link" href="{% url 'listar_automoveis' %}">Automóveis</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_anuncios' %}">Anúncios</a>
+              <a class="nav-link" href="{% url 'listar_anuncios' %}">Anúncios</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'meus_anuncios' %}">Meus Anúncios</a>
+              <a class="nav-link" href="{% url 'meus_anuncios' %}">Meus Anúncios</a>
             </li>
             {% if user.is_superuser %}
               <!-- Superusuário vê link para o painel de admin -->
               <li class="nav-item">
-                <a class="nav-link link-light" href="/admin/">Administração</a>
+                <a class="nav-link" href="/admin/">Administração</a>
               </li>
             {% endif %}
-            <li>
-              <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+            <li class="nav-item">
+              <a href="{% url 'logout' %}" class="btn btn-danger ms-2">Logout</a>
             </li>
           {% else %}
             <!-- Usuário não logado vê Anúncios e Registrar -->
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_anuncios' %}">Anúncios</a>
+              <a class="nav-link" href="{% url 'listar_anuncios' %}">Anúncios</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'register' %}">Registrar</a>
+              <a class="nav-link" href="{% url 'register' %}">Registrar</a>
             </li>
-            <li>
-              <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            <li class="nav-item">
+              <a href="{% url 'login' %}" class="btn btn-primary ms-2">Login</a>
             </li>
           {% endif %}
         </ul>
@@ -60,7 +156,7 @@
     </div>
   </nav>
   <!-- Conteúdo da página -->
-  <div class="container mt-4">
+  <div class="container mt-4 mb-4 p-4 border rounded shadow-sm">
     {% block content %}
     {% endblock %}
   </div>

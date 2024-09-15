@@ -1,6 +1,8 @@
 # urls.py (dentro da pasta maindudu)
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('register/', views.register, name='register'),
@@ -21,5 +23,11 @@ urlpatterns = [
     path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-
+    path('carro/editar/<str:carro_id>/', views.editar_carro, name='editar_carro'),
+    path('moto/editar/<str:moto_id>/', views.editar_moto, name='editar_moto'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'maindudu.views.error_404_view'

@@ -3,41 +3,51 @@
 {% block title %}Lista de Anúncios{% endblock %}
 
 {% block content %}
-    <h1 class="mt-4">Lista de Anúncios</h1>
-    <ul class="list-group mt-4">
-        {% for anuncio in anuncios %}
-        <li class="list-group-item">
-            <!-- Informações do automóvel relacionado ao anúncio -->
-            <strong>Automóvel:</strong> {{ anuncio.automovel.marca }} {{ anuncio.automovel.modelo }} (Ano: {{ anuncio.automovel.ano }})
-            <br>
-            
-            <!-- Preço por dia -->
-            <strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}
-            <br>
-            
-            <!-- Disponibilidade -->
-            <strong>Disponibilidade:</strong> 
-            {% if anuncio.disponibilidade %}
-                Disponível
-            {% else %}
-                Indisponível
-            {% endif %}
-            <br>
-            
-            <!-- Descrição do anúncio -->
-            <strong>Descrição:</strong> {{ anuncio.descricao }}
-            <br>
 
-            <!-- Informações do usuário -->
-            <strong>Anunciante:</strong> {{ anuncio.usuario.nome }} ({{ anuncio.usuario.email }})
-            <br>
+<div class="mt-4">
+    {% if user.is_authenticated %}
+        <a href="{% url 'criar_anuncio' %}" class="btn btn-success">Criar Novo Anúncio</a>
+    {% endif %}
+</div>
 
-            <div class="mt-2">
-                <!-- Link para consultar mais informações do anúncio -->
-                <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-info btn-sm">Consultar</a>
+
+    <div class="container mt-4">
+        <h1 class="mt-4">Lista de Anúncios</h1>
+
+        <!-- Cria um grid para os anúncios -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for anuncio in anuncios %}
+            <div class="col">
+                <div class="card h-100">
+                    <!-- Aqui, a imagem será exibida -->
+                    <img src="{{ anuncio.imagem.url }}" style="width: 100%; height: 300px; object-fit: cover; object-position: center;"class="card-img-top" alt="Imagem do automóvel" style="object-fit: cover; object-position: center;">
+                
+                    
+                    <div class="card-body">
+                        <!-- Informações básicas do anúncio -->
+                        <h5 class="card-title">{{ anuncio.automovel.marca }} {{ anuncio.automovel.modelo }}</h5>
+                        <p class="card-text"><strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}</p>
+                        <p class="card-text"><strong>Disponibilidade:</strong> 
+                            {% if anuncio.disponibilidade %}
+                                Disponível
+                            {% else %}
+                                Indisponível
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer d-flex justify-content-between">
+                        <!-- Botão para acessar mais informações -->
+                        <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-primary btn-sm">Ver detalhes</a>
+                        
+                        <!-- Indicação de que o anúncio é patrocinado -->
+                        {% if anuncio.patrocinado %}
+                            <span class="badge bg-warning text-dark">Patrocinado</span>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'criar_anuncio' %}" class="btn btn-primary mt-4">Criar Novo Anúncio</a>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
