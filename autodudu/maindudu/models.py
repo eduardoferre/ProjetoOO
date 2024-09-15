@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, nome, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    _id = models.ObjectIdField(primary_key=True)
+    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
     email = models.EmailField(unique=True)
     nome = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -40,6 +40,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    def __str__(self):
+        return self.nome
+    
     # Métodos para criar usuários
     @classmethod
     def create_user(cls, email, nome, password=None, **extra_fields):
@@ -93,7 +96,10 @@ class Carro(models.Model):
     cor = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
     numero_portas = models.IntegerField()
-    usuario = models.ForeignKey(Usuario, to_field='_id', on_delete=models.CASCADE, related_name='carros')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='carros')  # Removendo o `to_field`
+
+    def __str__(self):
+        return f"{self.automovel.marca} - {self.tipo} ({self.cor})"
  
     @classmethod
     def create_carro(cls, automovel, cor, tipo, numero_portas, usuario_id):

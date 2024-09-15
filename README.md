@@ -1,13 +1,13 @@
 # gordin-oo
 
 ```
-pip install Django==5.1.1
-
-python autodudu/manage.py runserver
-
 sudo systemctl stop mongod
-```
-networks:
-  django-mongo-network:
-    driver: bridge
 
+docker compose up --build -d
+
+docker exec -it autodudu_web /bin/bash
+
+python manage.py migrate
+
+python manage.py createsuperuser
+```
