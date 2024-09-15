@@ -18,6 +18,7 @@ urlpatterns = [
     path('anuncio/editar/<str:anuncio_id>/', views.editar_anuncio, name='editar_anuncio'),
     path('anuncio/deletar/<str:anuncio_id>/', views.deletar_anuncio, name='deletar_anuncio'),
     path('anuncio/consulta/<str:anuncio_id>/', views.consulta_anuncio, name='consulta_anuncio'),
+    path('meus-anuncios/', views.meus_anuncios, name='meus_anuncios'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
 

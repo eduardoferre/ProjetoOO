@@ -19,19 +19,27 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           {% if user.is_authenticated %}
-            <li class="nav-item"></li>
-              <a class="nav-link link-light" href="{% url 'listar_carros' %}">Carros</a>
+            <li class="nav-item">
+              <a class="nav-link link-light" href="{% url 'listar_carros' %}">Meus Carros</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link link-light" href="{% url 'listar_motos' %}">Motos</a>
+              <a class="nav-link link-light" href="{% url 'listar_motos' %}">Minhas Motos</a>
             </li>
             <li class="nav-item">
               <a class="nav-link link-light" href="{% url 'listar_automoveis' %}">Automóveis</a>
             </li>
-            <!-- Usuário logado vê Anúncios -->
             <li class="nav-item">
               <a class="nav-link link-light" href="{% url 'listar_anuncios' %}">Anúncios</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link link-light" href="{% url 'meus_anuncios' %}">Meus Anúncios</a>
+            </li>
+            {% if user.is_superuser %}
+              <!-- Superusuário vê link para o painel de admin -->
+              <li class="nav-item">
+                <a class="nav-link link-light" href="/admin/">Administração</a>
+              </li>
+            {% endif %}
             <li>
               <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
             </li>

@@ -93,7 +93,7 @@ def criar_carro(request):
         cor = request.POST.get('cor')
         tipo = request.POST.get('tipo')
         numero_portas = request.POST.get('numero_portas')
-        usuario = Usuario.objects.get(pk=ObjectId('66e6b6822fb94ae31994bd02'))
+        usuario = request.user
         Carro.create_carro(automovel, cor, tipo, numero_portas, usuario)
         return redirect('listar_carros')
     else:
@@ -102,7 +102,8 @@ def criar_carro(request):
 
 @login_required
 def listar_carros(request):
-    carros = Carro.obter_todos_carros()
+    user_id = request.user.pk
+    carros = Carro.obter_todos_carros(user_id)
     return render(request, 'listar_carros.html', {'carros': carros})
 
 @login_required
@@ -118,7 +119,7 @@ def criar_moto(request):
         cilindradas = request.POST.get('cilindradas')
         tipo = request.POST.get('tipo')
         cor = request.POST.get('cor')
-        usuario = Usuario.objects.get(pk=ObjectId('66e6b6822fb94ae31994bd02'))
+        usuario = request.user
         Moto.create_moto(automovel, cilindradas, tipo, cor, usuario)
         return redirect('listar_motos')
     else:
@@ -127,7 +128,8 @@ def criar_moto(request):
 
 @login_required
 def listar_motos(request):
-    motos = Moto.obter_todas_motos()
+    user_id = request.user.pk
+    motos = Moto.obter_todas_motos(user_id)
     return render(request, 'listar_motos.html', {'motos': motos})
 
 @login_required
@@ -140,18 +142,30 @@ def listar_anuncios(request):
     anuncios = Anuncio.obter_todos_anuncios()
     return render(request, 'listar_anuncios.html', {'anuncios': anuncios})
 
-# View para criar um novo anúncio
+@login_required
 def criar_anuncio(request):
     if request.method == 'POST':
         preco_por_dia = request.POST.get('preco_por_dia')
-        disponibilidade = request.POST.get('disponibilidade')
-        usuario = ObjectId('66e6b6822fb94ae31994bd02')  # Supondo que o usuário esteja autenticado
-        automovel = None  # Coloque a lógica de automóvel aqui
+        disponibilidade = request.POST.get('disponibilidade') == 'on'
+        descricao = request.POST.get('descricao')
+        usuario = request.user
+        
+        automovel_id = request.POST.get('automovel')  # Recebe o ID do automóvel
+        automovel_tipo = request.POST.get('automovel_tipo')  # Pode ser 'carro' ou 'moto'
+        
+        if automovel_tipo == 'carro':
+            automovel = Carro.objects.get(pk=ObjectId(automovel_id))
+        elif automovel_tipo == 'moto':
+            automovel = Moto.objects.get(pk=ObjectId(automovel_id))
         
         if preco_por_dia and disponibilidade and usuario and automovel:
-            Anuncio.create_anuncio(automovel, preco_por_dia, disponibilidade, usuario)
+            Anuncio.create_anuncio(automovel, preco_por_dia, disponibilidade, usuario, descricao)
             return redirect('listar_anuncios')
-    return render(request, 'criar_anuncio.html')
+        
+    carros = Carro.obter_todos_carros(request.user.pk)
+    motos = Moto.obter_todas_motos(request.user.pk)
+    
+    return render(request, 'criar_anuncio.html', {'carros': carros, 'motos': motos})
 
 @login_required
 def editar_anuncio(request, anuncio_id):
@@ -175,3 +189,12 @@ def deletar_anuncio(request, anuncio_id):
 def consulta_anuncio(request, anuncio_id):
     anuncio = get_object_or_404(Anuncio, pk=ObjectId(anuncio_id))
     return render(request, 'consulta_anuncio.html', {'anuncio': anuncio})
+
+@login_required
+def meus_anuncios(request):
+    # Obtém os anúncios do usuário logado
+    user_id = request.user.pk
+    anuncios = Anuncio.obter_anuncios_usuario(user_id)
+    
+    # Renderiza a página com os anúncios do usuário
+    return render(request, 'meus_anuncios.html', {'anuncios': anuncios})

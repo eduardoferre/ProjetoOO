@@ -7,6 +7,26 @@ from bson import ObjectId
 class UserManager(BaseUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
+    
+    def create_user(self, email, nome, password=None, **extra_fields):
+        if not email:
+            raise ValueError('O campo de email é obrigatório')
+        email = self.normalize_email(email)  # Normaliza o email
+        user = self.model(email=email, nome=nome, **extra_fields)
+        user.set_password(password)  # Hash da senha
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, nome, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser deve ter is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser deve ter is_superuser=True.')
+
+        return self.create_user(email, nome, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     _id = models.ObjectIdField(primary_key=True)
@@ -30,24 +50,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         user.save()
         return user
 
-    @classmethod
-    def create_superuser(cls, email, nome, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return cls.create_user(email, nome, password, **extra_fields)
-
     # Método para obter todos os usuários
     @classmethod
     def obter_todos_usuarios(cls):
         usuarios = Usuario.objects.values('_id', 'email', 'nome', 'is_active', 'is_staff')
-        for x in usuarios:
-            print(x)
         return usuarios
     
-    # Método necessário para autenticação no Django
-    def get_by_natural_key(self, email):
-        return self.__class__.objects.get(email=email)
-
     def __str__(self):
         return f"{self.id} - {self.email}"  # Inclua o id junto com o email
 
@@ -86,7 +94,7 @@ class Carro(models.Model):
     tipo = models.CharField(max_length=255)
     numero_portas = models.IntegerField()
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='carros')
-
+ 
     @classmethod
     def create_carro(cls, automovel, cor, tipo, numero_portas, usuario_id):
         if not automovel or not cor or not tipo or not numero_portas:
@@ -96,8 +104,8 @@ class Carro(models.Model):
         return carro
     
     @classmethod
-    def obter_todos_carros(cls):
-        return cls.objects.all()
+    def obter_todos_carros(cls,user_id):
+        return cls.objects.filter(usuario=ObjectId(user_id))
     
     @classmethod
     def deletar_carro(cls, carro_id):
@@ -125,8 +133,8 @@ class Moto(models.Model):
         return moto
     
     @classmethod
-    def obter_todas_motos(cls):
-        return cls.objects.all()
+    def obter_todas_motos(cls, user_id):
+        return cls.objects.filter(usuario=ObjectId(user_id))
 
     @classmethod
     def deletar_moto(cls, moto_id):
@@ -140,17 +148,29 @@ class Moto(models.Model):
 class Anuncio(models.Model):
     _id = models.ObjectIdField(primary_key=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    object_id = models.CharField(max_length=100)  # Alterando para CharField para armazenar o ObjectId como string
     automovel = GenericForeignKey('content_type', 'object_id')
     preco_por_dia = models.DecimalField(max_digits=10, decimal_places=2)
     disponibilidade = models.BooleanField(default=True)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='anuncios_gerais')
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='anuncios_gerais')
+    
+    # Campo para upload de imagem
+   
+    # Campo para descrição de texto
+    descricao = models.TextField(blank=True, null=True)
 
     @classmethod
-    def create_anuncio(cls, automovel, preco_por_dia, disponibilidade, usuario):
+    def create_anuncio(cls, automovel, preco_por_dia, disponibilidade, usuario, descricao=None):
         if not automovel or not preco_por_dia or not disponibilidade or not usuario:
             raise ValueError("Todos os campos são obrigatórios")
-        anuncio = cls(automovel=automovel, preco_por_dia=preco_por_dia, disponibilidade=disponibilidade, usuario=usuario)
+        
+        anuncio = cls(
+            automovel=automovel, 
+            preco_por_dia=preco_por_dia, 
+            disponibilidade=disponibilidade, 
+            usuario=usuario,
+            descricao=descricao,
+        )
         anuncio.save()
         return anuncio
     
@@ -187,3 +207,7 @@ class Anuncio(models.Model):
             return anuncio
         except Anuncio.DoesNotExist:
             print(f"Anúncio com ID {anuncio_id} não encontrado.")
+
+    @classmethod
+    def obter_anuncios_usuario(cls, user_id):
+        return cls.objects.filter(usuario=ObjectId(user_id))

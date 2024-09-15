@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Meus Anúncios
+{% endblock %}
+
+{% block content %}
+    <h1>Meus Anúncios</h1>
+
+    <ul>
+        {% for anuncio in anuncios %}
+        <li>
+            {{ anuncio.automovel.marca }} - {{ anuncio.preco_por_dia }} por dia - Disponível: {{ anuncio.disponibilidade }}
+            <a href="{% url 'editar_anuncio' anuncio.pk %}">Editar</a>
+            <a href="{% url 'deletar_anuncio' anuncio.pk %}">Deletar</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{% url 'criar_anuncio' %}">Criar Novo Anúncio</a>
+{% endblock %}

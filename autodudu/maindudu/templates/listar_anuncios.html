@@ -7,11 +7,34 @@
     <ul class="list-group mt-4">
         {% for anuncio in anuncios %}
         <li class="list-group-item">
-            {{ anuncio.automovel }} - Preço por dia: {{ anuncio.preco_por_dia }} - Disponível: {{ anuncio.disponibilidade }}
+            <!-- Informações do automóvel relacionado ao anúncio -->
+            <strong>Automóvel:</strong> {{ anuncio.automovel.marca }} {{ anuncio.automovel.modelo }} (Ano: {{ anuncio.automovel.ano }})
+            <br>
+            
+            <!-- Preço por dia -->
+            <strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}
+            <br>
+            
+            <!-- Disponibilidade -->
+            <strong>Disponibilidade:</strong> 
+            {% if anuncio.disponibilidade %}
+                Disponível
+            {% else %}
+                Indisponível
+            {% endif %}
+            <br>
+            
+            <!-- Descrição do anúncio -->
+            <strong>Descrição:</strong> {{ anuncio.descricao }}
+            <br>
+
+            <!-- Informações do usuário -->
+            <strong>Anunciante:</strong> {{ anuncio.usuario.nome }} ({{ anuncio.usuario.email }})
+            <br>
+
             <div class="mt-2">
-                <a href="{% url 'editar_anuncio' anuncio.id %}" class="btn btn-warning btn-sm">Editar</a>
-                <a href="{% url 'deletar_anuncio' anuncio.id %}" class="btn btn-danger btn-sm">Deletar</a>
-                <a href="{% url 'consulta_anuncio' anuncio.id %}" class="btn btn-info btn-sm">Consultar</a>
+                <!-- Link para consultar mais informações do anúncio -->
+                <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-info btn-sm">Consultar</a>
             </div>
         </li>
         {% endfor %}
