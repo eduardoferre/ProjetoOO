@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Anúncios</title>
+</head>
+<body>
+    <h1>Lista de Anúncios</h1>
+    <ul>
+        {% for anuncio in anuncios %}
+        <li>
+            {{ anuncio.automovel }} - Preço por dia: {{ anuncio.preco_por_dia }} - Disponível: {{ anuncio.disponibilidade }}
+            <a href="{% url 'editar_anuncio' anuncio.id %}">Editar</a>
+            <a href="{% url 'deletar_anuncio' anuncio.id %}">Deletar</a>
+            <a href="{% url 'consulta_anuncio' anuncio.id %}">Consultar</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'criar_anuncio' %}">Criar Novo Anúncio</a>
+</body>
+</html>

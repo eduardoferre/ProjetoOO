@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deletar Anúncio</title>
+</head>
+<body>
+    <h1>Deletar Anúncio</h1>
+    <p>Tem certeza que deseja deletar este anúncio?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Sim, deletar</button>
+    </form>
+    <a href="{% url 'listar_anuncios' %}">Cancelar</a>
+</body>
+</html>

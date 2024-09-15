@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consulta de Anúncio</title>
+</head>
+<body>
+    <h1>Consulta de Anúncio</h1>
+    <p><strong>Automóvel:</strong> {{ anuncio.automovel }}</p>
+    <p><strong>Preço por dia:</strong> {{ anuncio.preco_por_dia }}</p>
+    <p><strong>Disponível:</strong> {{ anuncio.disponibilidade }}</p>
+    <a href="{% url 'listar_anuncios' %}">Voltar à Lista</a>
+</body>
+</html>

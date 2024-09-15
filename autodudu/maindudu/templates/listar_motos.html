@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Motos</title>
+</head>
+<body>
+    <h1>Lista de Motos</h1>
+    <ul>
+        {% for moto in motos %}
+        <li>
+            {{ moto.automovel.marca }} {{ moto.automovel.modelo }} - Cilindradas: {{ moto.cilindradas }} - Tipo: {{ moto.tipo }} - Cor: {{ moto.cor }}
+            {% if moto.id %}
+                <a href="{% url 'deletar_moto' moto.id %}">Deletar</a>
+            {% else %}
+                ID da moto inválido
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'criar_moto' %}">Criar Moto</a>
+</body>
+</html>

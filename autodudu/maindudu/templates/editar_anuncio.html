@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Anúncio</title>
+</head>
+<body>
+    <h1>Editar Anúncio</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="preco_por_dia">Preço por dia:</label>
+        <input type="text" id="preco_por_dia" name="preco_por_dia" value="{{ anuncio.preco_por_dia }}" required>
+        <br>
+        <label for="disponibilidade">Disponibilidade:</label>
+        <input type="text" id="disponibilidade" name="disponibilidade" value="{{ anuncio.disponibilidade }}" required>
+        <br>
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{% url 'listar_anuncios' %}">Voltar à Lista</a>
+</body>
+</html>

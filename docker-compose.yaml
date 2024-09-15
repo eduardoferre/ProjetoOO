@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: autodudu_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./autodudu:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    environment:
+      - DEBUG=1
+      - DJANGO_SECRET_KEY=your-secret-key
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
+      - DJANGO_DATABASE_NAME=autodudu_db
+    networks:
+      - django-mongo-network
+
+  mongo:
+    image: mongo:3.2
+    container_name: autodudu_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
+    networks:
+      - django-mongo-network
+
+networks:
+  django-mongo-network:
+    driver: bridge

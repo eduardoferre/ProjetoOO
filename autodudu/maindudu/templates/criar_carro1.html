@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Carro</title>
+</head>
+<body>
+    <form method="post" action="{% url 'criar_carro' %}">
+        {% csrf_token %}
+        <label for="automovel">Escolha um Automóvel:</label>
+        <select name="automovel" id="automovel">
+            {% for automovel in automoveis %}
+                <option value="{{ automovel._id }}">{{ automovel.marca }} - {{ automovel.modelo }}</option>
+            {% endfor %}
+        </select>
+        
+        <!-- Campos adicionais para criar o carro -->
+        <label for="cor">Cor:</label>
+        <input type="text" id="cor" name="cor">
+    
+        <label for="tipo">Tipo:</label>
+        <input type="text" id="tipo" name="tipo">
+    
+        <label for="numero_portas">Número de Portas:</label>
+        <input type="number" id="numero_portas" name="numero_portas">
+    
+        <button type="submit">Criar Carro</button>
+    </form>
+</body>

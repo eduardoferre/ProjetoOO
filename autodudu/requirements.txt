@@ -1,0 +1,5 @@
+Django==3.2
+dnspython
+pymongo==3.12.3
+djongo==1.3.6
+mongoengine
