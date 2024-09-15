@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django import forms
 from maindudu.models import Automovel, Carro, Moto, Anuncio
 from django.shortcuts import render, redirect, get_object_or_404
+from bson import ObjectId
 
 
 Usuario = get_user_model()
@@ -69,8 +70,8 @@ def criar_automovel(request):
 # Views para Carro
 def criar_carro(request):
     if request.method == 'POST':
-        automovel_id = request.POST.get('automovel')
-        automovel = Automovel.objects.get(_id=automovel_id)
+        automovel_id = request.POST.get('automovel')       
+        automovel = Automovel.objects.get(pk=ObjectId(automovel_id))
         cor = request.POST.get('cor')
         tipo = request.POST.get('tipo')
         numero_portas = request.POST.get('numero_portas')

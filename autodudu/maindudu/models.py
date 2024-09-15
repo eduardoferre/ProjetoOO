@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from djongo import models
+from bson import ObjectId
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     _id = models.ObjectIdField(primary_key=True)
@@ -66,7 +67,7 @@ class Automovel(models.Model):
     @classmethod
     def deletar_automovel(automovel_id):  # só pode deletar os administradores
         try:
-            automovel = Automovel.objects.get(id=automovel_id)
+            automovel = Automovel.objects.get(pk=ObjectId(automovel_id))
             automovel.delete()
         except Automovel.DoesNotExist:
             print(f"Automóvel com ID {automovel_id} não encontrado.")
@@ -95,7 +96,7 @@ class Carro(models.Model):
     @classmethod
     def deletar_carro(cls, carro_id):
         try:
-            carro = Carro.objects.get(id=carro_id)
+            carro = Carro.objects.get(pk=ObjectId(carro_id))
             carro.delete()
         except Carro.DoesNotExist:
             print(f"Carro com ID {carro_id} não encontrado.")
@@ -124,7 +125,7 @@ class Moto(models.Model):
     @classmethod
     def deletar_moto(cls, moto_id):
         try:
-            moto = Moto.objects.get(id=moto_id)
+            moto = Moto.objects.get(pk=ObjectId(moto_id))
             moto.delete()
         except Moto.DoesNotExist:
             print(f"Moto com ID {moto_id} não encontrado.")
@@ -154,7 +155,7 @@ class Anuncio(models.Model):
     @classmethod
     def deletar_anuncio(cls, anuncio_id):
         try:
-            anuncio = Anuncio.objects.get(id=anuncio_id)
+            anuncio = Anuncio.objects.get(pk=ObjectId(anuncio_id))
             anuncio.delete()
         except Anuncio.DoesNotExist:
             print(f"Anúncio com ID {anuncio_id} não encontrado.")
@@ -166,7 +167,7 @@ class Anuncio(models.Model):
     @classmethod
     def editar_anuncio(cls, anuncio_id, preco_por_dia, disponibilidade):
         try:
-            anuncio = Anuncio.objects.get(id=anuncio_id)
+            anuncio = Anuncio.objects.get(pk=ObjectId(anuncio_id))
             anuncio.preco_por_dia = preco_por_dia
             anuncio.disponibilidade = disponibilidade
             anuncio.save()
@@ -176,7 +177,7 @@ class Anuncio(models.Model):
     @classmethod
     def consulta_anuncioId(cls, anuncio_id):
         try:
-            anuncio = Anuncio.objects.get(id=anuncio_id)
+            anuncio = Anuncio.objects.get(pk=ObjectId(anuncio_id))
             return anuncio
         except Anuncio.DoesNotExist:
             print(f"Anúncio com ID {anuncio_id} não encontrado.")

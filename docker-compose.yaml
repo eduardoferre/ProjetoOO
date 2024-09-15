@@ -20,7 +20,7 @@ services:
       - django-mongo-network
 
   mongo:
-    image: mongo:3.2
+    image: mongo:4.4
     container_name: autodudu_mongo
     ports:
       - "27017:27017"
