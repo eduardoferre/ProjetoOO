@@ -1,20 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Automóveis</title>
-</head>
-<body>
-    <h1>Lista de Automóveis</h1>
+{% extends 'base.html' %}
 
-    <ul>
+{% block title %}Lista de Automóveis{% endblock %}
+
+{% block content %}
+    <h1 class="mt-4">Lista de Automóveis</h1>
+
+    <ul class="list-group mt-4">
         {% for automovel in automoveis %}
-        <li>{{ automovel.marca }} {{ automovel.modelo }} - Ano: {{ automovel.ano }}</li>
+        <li class="list-group-item">
+            {{ automovel.marca }} {{ automovel.modelo }} - Ano: {{ automovel.ano }}
+        </li>
         {% endfor %}
     </ul>
 
-    <br>
-    <a href="{% url 'criar_automovel' %}">Criar Novo Automóvel</a>
-</body>
-</html>
+    <a href="{% url 'criar_automovel' %}" class="btn btn-primary mt-4">Criar Novo Automóvel</a>
+{% endblock %}

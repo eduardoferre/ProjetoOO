@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Anúncios</title>
-</head>
-<body>
-    <h1>Lista de Anúncios</h1>
-    <ul>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Anúncios{% endblock %}
+
+{% block content %}
+    <h1 class="mt-4">Lista de Anúncios</h1>
+    <ul class="list-group mt-4">
         {% for anuncio in anuncios %}
-        <li>
+        <li class="list-group-item">
             {{ anuncio.automovel }} - Preço por dia: {{ anuncio.preco_por_dia }} - Disponível: {{ anuncio.disponibilidade }}
-            <a href="{% url 'editar_anuncio' anuncio.id %}">Editar</a>
-            <a href="{% url 'deletar_anuncio' anuncio.id %}">Deletar</a>
-            <a href="{% url 'consulta_anuncio' anuncio.id %}">Consultar</a>
+            <div class="mt-2">
+                <a href="{% url 'editar_anuncio' anuncio.id %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'deletar_anuncio' anuncio.id %}" class="btn btn-danger btn-sm">Deletar</a>
+                <a href="{% url 'consulta_anuncio' anuncio.id %}" class="btn btn-info btn-sm">Consultar</a>
+            </div>
         </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'criar_anuncio' %}">Criar Novo Anúncio</a>
-</body>
-</html>
+    <a href="{% url 'criar_anuncio' %}" class="btn btn-primary mt-4">Criar Novo Anúncio</a>
+{% endblock %}

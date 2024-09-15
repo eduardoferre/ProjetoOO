@@ -1,8 +1,12 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from djongo import models
 from bson import ObjectId
+
+class UserManager(BaseUserManager):
+    def get_by_natural_key(self, email):
+        return self.get(email=email)
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     _id = models.ObjectIdField(primary_key=True)
@@ -13,6 +17,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nome']
+
+    objects = UserManager()
 
     # Métodos para criar usuários
     @classmethod
@@ -82,10 +88,10 @@ class Carro(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='carros')
 
     @classmethod
-    def create_carro(cls, automovel, cor, tipo, numero_portas):
+    def create_carro(cls, automovel, cor, tipo, numero_portas, usuario_id):
         if not automovel or not cor or not tipo or not numero_portas:
             raise ValueError("Todos os campos são obrigatórios")
-        carro = cls(automovel=automovel, cor=cor, tipo=tipo, numero_portas=numero_portas)
+        carro = cls(automovel=automovel, cor=cor, tipo=tipo, numero_portas=numero_portas, usuario=usuario_id)
         carro.save()
         return carro
     
@@ -111,10 +117,10 @@ class Moto(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='motos')
 
     @classmethod
-    def create_moto(cls, automovel, cilindradas, tipo, cor):
+    def create_moto(cls, automovel, cilindradas, tipo, cor, usuario_id):
         if not automovel or not cilindradas or not tipo or not cor:
             raise ValueError("Todos os campos são obrigatórios")
-        moto = cls(automovel=automovel, cilindradas=cilindradas, tipo=tipo, cor=cor)
+        moto = cls(automovel=automovel, cilindradas=cilindradas, tipo=tipo, cor=cor, usuario=usuario_id)
         moto.save()
         return moto
     

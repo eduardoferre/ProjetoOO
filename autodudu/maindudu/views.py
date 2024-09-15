@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib import messages
 from django import forms
 from maindudu.models import Automovel, Carro, Moto, Anuncio
 from django.shortcuts import render, redirect, get_object_or_404
 from bson import ObjectId
+from django.contrib.auth.decorators import login_required
+
 
 
 Usuario = get_user_model()
@@ -33,16 +36,31 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
-# View de sucesso (pode ser um simples redirecionamento)
-def success(request):
-    return render(request, 'success.html')
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('listar_usuarios')  # Substitua 'home' pela sua URL de redirecionamento pós-login
+        else:
+            messages.error(request, 'Nome de usuário ou senha incorretos.')
+    
+    return render(request, 'login.html')
 
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+@login_required
 def listar_usuarios(request):
     if request.method == 'GET':
         usuarios = Usuario.obter_todos_usuarios()
         return render(request, 'listar_usuarios.html', {'usuarios': usuarios})
 
-# # View para listar todos os automóveis
+@login_required
 def listar_automoveis(request):
     automoveis = Automovel().obter_todos_automoveis()  # Chamando o método do model
     return render(request, 'listar_automoveis.html', {'automoveis': automoveis})
@@ -53,7 +71,7 @@ class AutomovelForm(forms.ModelForm):
         model = Automovel
         fields = ['marca', 'modelo', 'ano']  # Campos do modelo Automovel
 
-# View para criar um Automóvel
+@login_required
 def criar_automovel(request):
     if request.method == 'POST':
         form = AutomovelForm(request.POST)
@@ -67,7 +85,7 @@ def criar_automovel(request):
 
 
 
-# Views para Carro
+@login_required
 def criar_carro(request):
     if request.method == 'POST':
         automovel_id = request.POST.get('automovel')       
@@ -75,38 +93,44 @@ def criar_carro(request):
         cor = request.POST.get('cor')
         tipo = request.POST.get('tipo')
         numero_portas = request.POST.get('numero_portas')
-        Carro.create_carro(automovel, cor, tipo, numero_portas)
+        usuario = Usuario.objects.get(pk=ObjectId('66e6b6822fb94ae31994bd02'))
+        Carro.create_carro(automovel, cor, tipo, numero_portas, usuario)
         return redirect('listar_carros')
     else:
         automoveis = Automovel.obter_todos_automoveis()  # Obter automóveis disponíveis
         return render(request, 'criar_carro.html', {'automoveis': automoveis})
 
+@login_required
 def listar_carros(request):
     carros = Carro.obter_todos_carros()
     return render(request, 'listar_carros.html', {'carros': carros})
 
+@login_required
 def deletar_carro(request, carro_id): # REFAZER <<<<<<<<< SOMENTE O USUARIO QUE CRIOU PODE DELETAR
     Carro.deletar_carro(carro_id)
     return redirect('listar_carros')
 
-
+@login_required
 def criar_moto(request):
     if request.method == 'POST':
         automovel_id = request.POST.get('automovel')
-        automovel = Automovel.objects.get(id=automovel_id)
+        automovel = Automovel.objects.get(pk=ObjectId(automovel_id))
         cilindradas = request.POST.get('cilindradas')
         tipo = request.POST.get('tipo')
         cor = request.POST.get('cor')
-        Moto.create_moto(automovel, cilindradas, tipo, cor)
+        usuario = Usuario.objects.get(pk=ObjectId('66e6b6822fb94ae31994bd02'))
+        Moto.create_moto(automovel, cilindradas, tipo, cor, usuario)
         return redirect('listar_motos')
     else:
         automoveis = Automovel.obter_todos_automoveis()  # Obter automóveis disponíveis
         return render(request, 'criar_moto.html', {'automoveis': automoveis})
 
+@login_required
 def listar_motos(request):
     motos = Moto.obter_todas_motos()
     return render(request, 'listar_motos.html', {'motos': motos})
 
+@login_required
 def deletar_moto(request, moto_id): # COLOCAR PRA DELETAR APENAS O USER RESPONSÁVEL
     Moto.deletar_moto(moto_id)
     return redirect('listar_motos')
@@ -121,7 +145,7 @@ def criar_anuncio(request):
     if request.method == 'POST':
         preco_por_dia = request.POST.get('preco_por_dia')
         disponibilidade = request.POST.get('disponibilidade')
-        usuario = request.user  # Supondo que o usuário esteja autenticado
+        usuario = ObjectId('66e6b6822fb94ae31994bd02')  # Supondo que o usuário esteja autenticado
         automovel = None  # Coloque a lógica de automóvel aqui
         
         if preco_por_dia and disponibilidade and usuario and automovel:
@@ -129,9 +153,9 @@ def criar_anuncio(request):
             return redirect('listar_anuncios')
     return render(request, 'criar_anuncio.html')
 
-# View para editar um anúncio
+@login_required
 def editar_anuncio(request, anuncio_id):
-    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
+    anuncio = get_object_or_404(Anuncio, pk=ObjectId(anuncio_id))
     if request.method == 'POST':
         anuncio.preco_por_dia = request.POST.get('preco_por_dia')
         anuncio.disponibilidade = request.POST.get('disponibilidade')
@@ -139,9 +163,9 @@ def editar_anuncio(request, anuncio_id):
         return redirect('listar_anuncios')
     return render(request, 'editar_anuncio.html', {'anuncio': anuncio})
 
-# View para deletar um anúncio
+@login_required
 def deletar_anuncio(request, anuncio_id):
-    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
+    anuncio = get_object_or_404(Anuncio, pk=ObjectId(anuncio_id))
     if request.method == 'POST':
         anuncio.delete()
         return redirect('listar_anuncios')
@@ -149,5 +173,5 @@ def deletar_anuncio(request, anuncio_id):
 
 # View para consultar um anúncio por ID
 def consulta_anuncio(request, anuncio_id):
-    anuncio = get_object_or_404(Anuncio, id=anuncio_id)
+    anuncio = get_object_or_404(Anuncio, pk=ObjectId(anuncio_id))
     return render(request, 'consulta_anuncio.html', {'anuncio': anuncio})

@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Motos</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Motos{% endblock %}
+
+{% block content %}
     <h1>Lista de Motos</h1>
-    <ul>
+    <ul class="list-group">
         {% for moto in motos %}
-        <li>
+        <li class="list-group-item">
             {{ moto.automovel.marca }} {{ moto.automovel.modelo }} - Cilindradas: {{ moto.cilindradas }} - Tipo: {{ moto.tipo }} - Cor: {{ moto.cor }}
-            {% if moto.id %}
-                <a href="{% url 'deletar_moto' moto.id %}">Deletar</a>
+            {% if moto.pk %}
+                <a href="{% url 'deletar_moto' moto.pk %}" class="btn btn-danger btn-sm float-end">Deletar</a>
             {% else %}
-                ID da moto inválido
+                <span class="text-danger">ID da moto inválido</span>
             {% endif %}
         </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'criar_moto' %}">Criar Moto</a>
-</body>
-</html>
+    <a href="{% url 'criar_moto' %}" class="btn btn-primary mt-4">Criar Moto</a>
+{% endblock %}

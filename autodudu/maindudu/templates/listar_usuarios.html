@@ -1,13 +1,11 @@
-<!-- listar_usuarios.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Usuários</title>
-</head>
-<body>
-    <h2>Lista de Todos os Usuários</h2>
-    <table>
-        <thead>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuários{% endblock %}
+
+{% block content %}
+    <h2 class="mt-4">Lista de Todos os Usuários</h2>
+    <table class="table table-striped table-hover mt-4">
+        <thead class="table-dark">
             <tr>
                 <th>Nome</th>
                 <th>Email</th>
@@ -22,5 +20,4 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

@@ -1,18 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Carros</title>
-</head>
-<body>
-    <h1>Lista de Carros</h1>
-    <ul>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Carros{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Lista de Carros</h1>
+    <ul class="list-group">
         {% for carro in carros %}
-        <li>
-            {{ carro.automovel.marca }} {{ carro.automovel.modelo }} - Cor: {{ carro.cor }} - Tipo: {{ carro.tipo }} - Portas: {{ carro.numero_portas }}
-            <a href="{% url 'deletar_carro' carro.pk %}">Deletar</a>
+        <li class="list-group-item">
+            <strong>{{ carro.automovel.marca }} {{ carro.automovel.modelo }}</strong> 
+            - Cor: {{ carro.cor }} 
+            - Tipo: {{ carro.tipo }} 
+            - Portas: {{ carro.numero_portas }}
+            <a href="{% url 'deletar_carro' carro.pk %}" class="btn btn-danger btn-sm float-end">Deletar</a>
         </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'criar_carro' %}">Criar Carro</a>
-</body>
-</html>
+    <a href="{% url 'criar_carro' %}" class="btn btn-primary mt-4">Criar Carro</a>
+{% endblock %}

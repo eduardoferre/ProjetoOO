@@ -1,29 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Criar Moto</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Criar Moto{% endblock %}
+
+{% block content %}
     <h1>Criar Moto</h1>
     <form method="POST">
         {% csrf_token %}
-        <label for="automovel">Automóvel:</label>
-        <select name="automovel" required>
-            {% for automovel in automoveis %}
-            <option value="{{ automovel.id }}">{{ automovel.marca }} - {{ automovel.modelo }} - {{ automovel.ano }}</option>
-            {% endfor %}
-        </select><br>
+        
+        <div class="mb-3">
+            <label for="automovel" class="form-label">Automóvel:</label>
+            <select name="automovel" id="automovel" class="form-select" required>
+                {% for automovel in automoveis %}
+                <option value="{{ automovel.pk }}">{{ automovel.marca }} - {{ automovel.modelo }} - {{ automovel.ano }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="cilindradas">Cilindradas:</label>
-        <input type="number" name="cilindradas" required><br>
+        <div class="mb-3">
+            <label for="cilindradas" class="form-label">Cilindradas:</label>
+            <input type="number" name="cilindradas" id="cilindradas" class="form-control" required>
+        </div>
 
-        <label for="tipo">Tipo:</label>
-        <input type="text" name="tipo" required><br>
+        <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo:</label>
+            <input type="text" name="tipo" id="tipo" class="form-control" required>
+        </div>
 
-        <label for="cor">Cor:</label>
-        <input type="text" name="cor" required><br>
+        <div class="mb-3">
+            <label for="cor" class="form-label">Cor:</label>
+            <input type="text" name="cor" id="cor" class="form-control" required>
+        </div>
 
-        <button type="submit">Criar Moto</button>
+        <button type="submit" class="btn btn-primary">Criar Moto</button>
     </form>
-</body>
-</html>
+{% endblock %}
