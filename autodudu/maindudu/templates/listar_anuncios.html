@@ -10,44 +10,87 @@
     {% endif %}
 </div>
 
+<!-- Ordenação de Anúncios -->
+<div class="container mt-4">
+    <h1 class="mt-4">Lista de Anúncios</h1>
 
-    <div class="container mt-4">
-        <h1 class="mt-4">Lista de Anúncios</h1>
+    <div class="mb-4">
+        <label for="orderBy" class="form-label">Ordenar por Preço:</label>
+        <select id="orderBy" class="form-select">
+            <option value="preco_asc">Preço (menor primeiro)</option>
+            <option value="preco_desc">Preço (maior primeiro)</option>
+        </select>
+    </div>
 
-        <!-- Cria um grid para os anúncios -->
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for anuncio in anuncios %}
-            <div class="col">
-                <div class="card h-100">
-                    <!-- Aqui, a imagem será exibida -->
-                    <img src="{{ anuncio.imagem.url }}" style="width: 100%; height: 300px; object-fit: cover; object-position: center;"class="card-img-top" alt="Imagem do automóvel" style="object-fit: cover; object-position: center;">
+    <!-- Cria um grid para os anúncios -->
+    <div id="anunciosGrid" class="row row-cols-1 row-cols-md-3 g-4">
+        {% for anuncio in anuncios %}
+        <div class="col anuncio" data-preco="{{ anuncio.preco_por_dia }}">
+            <div class="card h-100">
+                <!-- Aqui, a imagem será exibida -->
+                <img src="{{ anuncio.imagem.url }}" style="width: 100%; height: 300px; object-fit: cover; object-position: center;" class="card-img-top" alt="Imagem do automóvel">
                 
-                    
-                    <div class="card-body">
-                        <!-- Informações básicas do anúncio -->
-                        <h5 class="card-title">{{ anuncio.automovel.marca }} {{ anuncio.automovel.modelo }}</h5>
-                        <p class="card-text"><strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}</p>
-                        <p class="card-text"><strong>Disponibilidade:</strong> 
-                            {% if anuncio.disponibilidade %}
-                                Disponível
-                            {% else %}
-                                Indisponível
-                            {% endif %}
-                        </p>
-                    </div>
-                    
-                    <div class="card-footer d-flex justify-content-between">
-                        <!-- Botão para acessar mais informações -->
-                        <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-primary btn-sm">Ver detalhes</a>
-                        
-                        <!-- Indicação de que o anúncio é patrocinado -->
-                        {% if anuncio.patrocinado %}
-                            <span class="badge bg-warning text-dark">Patrocinado</span>
+                <div class="card-body">
+                    <!-- Informações básicas do anúncio -->
+                    <h5 class="card-title">{{ anuncio.automovel.marca }} {{ anuncio.automovel.modelo }}</h5>
+                    <p class="card-text"><strong>Preço por dia:</strong> R$ {{ anuncio.preco_por_dia }}</p>
+                    <p class="card-text"><strong>Disponibilidade:</strong> 
+                        {% if anuncio.disponibilidade %}
+                            Disponível
+                        {% else %}
+                            Indisponível
                         {% endif %}
-                    </div>
+                    </p>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <!-- Botão para acessar mais informações -->
+                    <a href="{% url 'consulta_anuncio' anuncio.pk %}" class="btn btn-primary btn-sm">Ver detalhes</a>
+                    
+                    <!-- Indicação de que o anúncio é patrocinado -->
+                    {% if anuncio.patrocinado %}
+                        <span class="badge bg-warning text-dark">Patrocinado</span>
+                    {% endif %}
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderBy = document.getElementById('orderBy');
+        const anunciosGrid = document.getElementById('anunciosGrid');
+
+        function sortAnuncios() {
+            const order = orderBy.value;
+
+            let anuncios = Array.from(document.querySelectorAll('.anuncio'));
+
+            // Ordenação
+            anuncios.sort((a, b) => {
+                const precoA = parseFloat(a.getAttribute('data-preco'));
+                const precoB = parseFloat(b.getAttribute('data-preco'));
+
+                if (order === 'preco_asc') {
+                    return precoA - precoB;
+                } else if (order === 'preco_desc') {
+                    return precoB - precoA;
+                }
+
+                return 0;
+            });
+
+            // Atualiza o grid com os anúncios ordenados
+            anuncios.forEach(anuncio => anunciosGrid.appendChild(anuncio));
+        }
+
+        orderBy.addEventListener('change', sortAnuncios);
+
+        // Inicializar a ordenação na carga da página
+        sortAnuncios();
+    });
+</script>
+
 {% endblock %}

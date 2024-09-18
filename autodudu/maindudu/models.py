@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, nome, password, **extra_fields)
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+    _id = models.ObjectIdField(primary_key=True)
     email = models.EmailField(unique=True)
     nome = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -157,11 +157,11 @@ class Moto(models.Model):
 class Anuncio(models.Model):
     _id = models.ObjectIdField(primary_key=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.CharField(max_length=100)  # Alterando para CharField para armazenar o ObjectId como string
+    object_id = models.CharField(max_length=100)
     automovel = GenericForeignKey('content_type', 'object_id')
     preco_por_dia = models.DecimalField(max_digits=10, decimal_places=2)
     disponibilidade = models.BooleanField(default=True)
-    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, related_name='anuncios_gerais')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='anuncios_gerais')
     imagem = models.ImageField(upload_to='anuncios/', blank=True, null=True)  
    
     # Campo para descrição de texto

@@ -1,50 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
   <style>
+    /* Estrutura com Flexbox */
     body {
-      background-color: #ffffff; /* Cor de fundo do corpo */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Ocupa a altura total da tela */
+      margin: 0; /* Remove a margem padrão */
     }
 
     /* Navbar */
     .navbar {
       background-color: #343a40; /* Cor de fundo da navbar */
+      width: 100%; /* Garante que a navbar ocupe 100% da tela */
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
-      width: 100%;
     }
-  
+
     .navbar-brand {
       font-weight: bold; /* Deixa o texto mais grosso */
       color: #ffffff; /* Cor do texto da marca */
       font-size: 1.75rem; /* Tamanho da fonte da marca */
     }
-  
+
     .navbar-brand:hover {
       color: #e9ecef; /* Cor do texto ao passar o mouse */
     }
-  
+
     .navbar-nav .nav-link {
       color: #ffffff; /* Cor do texto dos links de navegação */
       font-size: 1.2rem; /* Tamanho da fonte dos links de navegação */
       padding: 0.5rem 1rem; /* Espaçamento interno dos links de navegação */
     }
-  
+
     .navbar-nav .nav-link:hover {
       color: #007bff; /* Cor do texto dos links ao passar o mouse */
     }
-  
+
     .navbar-toggler {
       border: none; /* Remove a borda do botão de alternância */
     }
-  
+
     .navbar-toggler-icon {
       background-image: url("data:image/svg+xml,..."); 
     }
-  
+
     /* Botões */
     .btn-primary {
       background-color: #2e5988; /* Cor de fundo do botão primário */
@@ -53,7 +59,7 @@
       padding: 0.5rem 1rem; /* Espaçamento interno do botão */
       border-radius: 0.25rem; /* Bordas arredondadas do botão */
     }
-  
+
     .btn-primary:hover {
       background-color: #0056b3; /* Cor de fundo ao passar o mouse */
     }
@@ -65,12 +71,12 @@
       padding: 0.5rem 1rem; /* Espaçamento interno do botão */
       border-radius: 0.25rem; /* Bordas arredondadas do botão */
     }
-  
+
     .btn-info:hover {
       background-color: #00b35a; /* Cor de fundo ao passar o mouse */
       color: #ffffff;
     }
-  
+
     .btn-danger {
       background-color: #dc3545; /* Cor de fundo do botão de perigo */
       border: none; /* Remove a borda padrão */
@@ -78,7 +84,7 @@
       padding: 0.5rem 0.6rem; /* Espaçamento interno do botão */
       border-radius: 0.30rem; /* Bordas arredondadas do botão */
     }
-  
+
     .btn-danger:hover {
       background-color: #c82333; /* Cor de fundo ao passar o mouse */
     }
@@ -97,16 +103,43 @@
       color: #ffffff; /* Cor do texto ao passar o mouse */
       opacity: 0.9; /* Opacidade ao passar o mouse */
     }
-    
+
+    /* Container principal */
+    .container {
+      flex: 1; /* O conteúdo se expande para ocupar o espaço disponível */
+    }
+
+    /* Footer */
+    footer {
+      background-color: #343a40;
+      color: #ffffff;
+      padding: 1rem 0;
+      text-align: center;
+      width: 100%; /* Ocupa toda a largura */
+      margin-top: auto; /* Empurra o footer para o final da página */
+    }
+
+    footer a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      color: #007bff;
+    }
+
+    .footer-content {
+      font-size: 0.9rem;
+    }
 
   </style>
-  
 </head>
 <body>
 
-<div class="container">
+<div class="container-fluid">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark w-100">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">AutoDudu</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,12 +188,25 @@
       </div>
     </div>
   </nav>
+
   <!-- Conteúdo da página -->
   <div class="container mt-4 mb-4 p-4 border rounded shadow-sm">
     {% block content %}
     {% endblock %}
   </div>
 </div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <p>&copy; 2024 AutoDudu. Todos os direitos reservados.</p>
+    <p>
+      <a href="#">Sobre</a> |
+      <a href="#">Contato</a> |
+      <a href="#">Política de Privacidade</a>
+    </p>
+  </div>
+</footer>
 
 </body>
 </html>
